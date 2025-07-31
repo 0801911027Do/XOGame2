@@ -1,23 +1,19 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.swing.*;
-import static javax.swing.SwingUtilities.invokeLater;
 import javax.swing.border.Border;
-
 
 public class XOGame2 extends JFrame {
     private final int SIZE = 3;
     private final JButton[][] buttons = new JButton[SIZE][SIZE];
     private boolean playerXTurn = true;
     private boolean againstAI = false;
-    private Component title;
-
 
     private enum Difficulty {EASY, MEDIUM, HARD}
     private Difficulty currentDifficulty = Difficulty.EASY;
@@ -444,24 +440,13 @@ public class XOGame2 extends JFrame {
 
         resetButton.addActionListener(e -> resetBoard());
 
-        resetScoreButton.addActionListener(e -> {
-            scoreX = 0;
-            scoreO = 0;
-            updateScoreLabels();
-        });
-
-        // Top panel for buttons
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setOpaque(false);
         topPanel.add(backButton);
         topPanel.add(resetButton);
         topPanel.add(settingsButton);
-        topPanel.add(resetScoreButton); // เพิ่มปุ่มรีเซ็ตคะแนน
 
-        /**
-         * JLabel that displays the current score for player X.
-         * The label text is initialized with the value of scoreX.
-         */
+        // Score Panel
         JPanel scorePanel = new JPanel();
         scorePanel.setOpaque(false);
         scoreLabelX = new JLabel("X: " + scoreX);
@@ -545,7 +530,6 @@ public class XOGame2 extends JFrame {
         if (gridPanel != null) {
             gridPanel.repaint();
         }
-        updateScoreLabels(); // เพิ่มบรรทัดนี้
     }
 
     private void disableAllButtons() {
@@ -568,7 +552,6 @@ public class XOGame2 extends JFrame {
         if (checkWin(currentSymbol)) {
             disableAllButtons();
             gridPanel.repaint();
-            // เพิ่มการอัปเดตคะแนน
             if (currentSymbol.equals("X")) scoreX++;
             else scoreO++;
             updateScoreLabels();
@@ -842,10 +825,6 @@ public class XOGame2 extends JFrame {
         return false;
     }
 
-    /**
-     * @param symbol
-     * @return
-     */
     private boolean isHypotheticalWin(String symbol) {
         for (int i = 0; i < SIZE; i++) {
             if (buttons[i][0].getText().equals(symbol) && buttons[i][1].getText().equals(symbol) && buttons[i][2].getText().equals(symbol)) {
@@ -869,7 +848,6 @@ public class XOGame2 extends JFrame {
     }
     /**
      * Main method to start the game.
-     * @param args
      */
     public static void main(String[] args) {
         try {
